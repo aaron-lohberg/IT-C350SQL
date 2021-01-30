@@ -1,0 +1,240 @@
+CREATE TABLE "PATRON"
+(
+  patronName VARCHAR(1024) NOT NULL,
+  patronPassword VARCHAR(1024) NOT NULL,
+  patronID SERIAL NOT NULL,
+  patronDateCreated DATE NOT NULL,
+  isAdmin INT NOT NULL,
+  patronEmail VARCHAR(1024) NOT NULL,
+  PRIMARY KEY (patronID),
+  UNIQUE (patronName)
+);
+
+CREATE TABLE "TICKETS"
+(
+  dateCreated DATE NOT NULL,
+  description VARCHAR(1024) NOT NULL,
+  status VARCHAR(1024) NOT NULL,
+  ticketID SERIAL NOT NULL,
+  patronID INT NOT NULL,
+  PRIMARY KEY (ticketID),
+  CONSTRAINT fk_patron FOREIGN KEY (patronID) REFERENCES "PATRON"(patronID)
+);
+
+CREATE TABLE "PARTY"
+(
+  partyName VARCHAR(1024) NOT NULL,
+  dungeonMaster VARCHAR(1024) NOT NULL,
+  maxSize INT NOT NULL,
+  timeAndDay VARCHAR(1024) NOT NULL,
+  campaignName VARCHAR(1024) NOT NULL,
+  startingLevel INT NOT NULL,
+  skillLevel VARCHAR(1024),
+  location VARCHAR(1024) NOT NULL,
+  description VARCHAR(1024),
+  notes VARCHAR(1024),
+  partyID SERIAL NOT NULL,
+  isActive INT NOT NULL,
+  PRIMARY KEY (partyID)
+);
+
+CREATE TABLE "SPELL"
+(
+  spellName VARCHAR(1024) NOT NULL,
+  spellLevel INT NOT NULL,
+  castingTime VARCHAR(1024) NOT NULL,
+  duration VARCHAR(1024) NOT NULL,
+  range VARCHAR(1024) NOT NULL,
+  school VARCHAR(1024) NOT NULL,
+  spellSave VARCHAR(1024) NOT NULL,
+  components VARCHAR(1024) NOT NULL,
+  ritual INT NOT NULL,
+  concentration INT NOT NULL,
+  spellDescription VARCHAR(1024) NOT NULL,
+  spellID SERIAL NOT NULL,
+  PRIMARY KEY (spellID)
+);
+
+CREATE TABLE "DNDCLASS"
+(
+  deity VARCHAR(1024),
+  hitDie INT NOT NULL,
+  dndClassName VARCHAR(1024) NOT NULL,
+  subClass VARCHAR(1024) NOT NULL,
+  savingThrow VARCHAR(1024) NOT NULL,
+  primaryAttribute VARCHAR(1024) NOT NULL,
+  equipmentProf VARCHAR(1024) NOT NULL,
+  dndClassDescription VARCHAR(1024) NOT NULL,
+  eldritchInvocation VARCHAR(1024),
+  dndClassID SERIAL NOT NULL,
+  PRIMARY KEY (dndClassID)
+);
+
+CREATE TABLE "SKILL"
+(
+  skillName VARCHAR(1024) NOT NULL,
+  skillDescription VARCHAR(1024),
+  skillValue INT NOT NULL,
+  proficiency INT NOT NULL,
+  expertise INT NOT NULL,
+  skillID SERIAL NOT NULL,
+  PRIMARY KEY (skillID),
+  CHECK (skillID <= 18)
+);
+
+CREATE TABLE "PHYSICALITY"
+(
+  height FLOAT NOT NULL,
+  eyeColor VARCHAR(1024),
+  hairColor VARCHAR(1024),
+  weight INT NOT NULL,
+  age INT NOT NULL,
+  skinColor VARCHAR(1024) NOT NULL,
+  uniqueMark VARCHAR(1024),
+  physicalityID SERIAL NOT NULL,
+  PRIMARY KEY (physicalityID)
+);
+
+
+
+CREATE TABLE "RACE"
+(
+  history VARCHAR(1024) NOT NULL,
+  size VARCHAR(1024) NOT NULL,
+  speed INT NOT NULL,
+  raceName VARCHAR(1024) NOT NULL,
+  raceID SERIAL NOT NULL,
+  PRIMARY KEY (raceID)
+);
+
+CREATE TABLE "RACE_statBonus"
+(
+  statBonus VARCHAR(1024) NOT NULL,
+  raceID INT NOT NULL,
+  PRIMARY KEY (statBonus, raceID),
+  CONSTRAINT fk_race FOREIGN KEY (raceID) REFERENCES "RACE"(raceID)
+);
+
+CREATE TABLE "RACE_racialFeats"
+(
+  racialFeats VARCHAR(1024) NOT NULL,
+  raceID INT NOT NULL,
+  PRIMARY KEY (racialFeats, raceID),
+  CONSTRAINT fk_race FOREIGN KEY (raceID) REFERENCES "RACE"(raceID)
+);
+
+CREATE TABLE "RACE_racialTraits"
+(
+  racialTraits VARCHAR(1024) NOT NULL,
+  raceID INT NOT NULL,
+  PRIMARY KEY (racialTraits, raceID),
+  CONSTRAINT fk_race FOREIGN KEY (raceID) REFERENCES "RACE"(raceID)
+);
+
+CREATE TABLE "CHARACTER"
+(
+  charName VARCHAR(1024) NOT NULL,
+  charLevel INT NOT NULL,
+  charID SERIAL NOT NULL,
+  feat VARCHAR(1024),
+  strength INT NOT NULL,
+  intelligence INT NOT NULL,
+  charisma INT NOT NULL,
+  constitution INT NOT NULL,
+  wisdom INT NOT NULL,
+  dexterity INT NOT NULL,
+  hitPoints INT NOT NULL,
+  flaw VARCHAR(1024),
+  bond VARCHAR(1024),
+  ideal VARCHAR(1024),
+  background VARCHAR(1024) NOT NULL,
+  partyID INT,
+  patronID INT NOT NULL,
+  dndClassID INT NOT NULL,
+  raceID INT NOT NULL,
+  physicalityID INT NOT NULL,
+  PRIMARY KEY (charID),
+  CONSTRAINT fk_party FOREIGN KEY (partyID) REFERENCES "PARTY"(partyID),
+  CONSTRAINT fk_patron FOREIGN KEY (patronID) REFERENCES "PATRON"(patronID),
+  CONSTRAINT fk_dndClass FOREIGN KEY (dndClassID) REFERENCES "DNDCLASS"(dndClassID),
+  CONSTRAINT fk_race FOREIGN KEY (raceID) REFERENCES "RACE"(raceID),
+  CONSTRAINT fk_physicality  FOREIGN KEY (physicalityID) REFERENCES "PHYSICALITY"(physicalityID)
+);
+
+CREATE TABLE "CHARACTER_trait"
+(
+  trait VARCHAR(1024) NOT NULL,
+  charID INT NOT NULL,
+  PRIMARY KEY (trait, charID),
+  CONSTRAINT fk_character FOREIGN KEY (charID) REFERENCES "CHARACTER"(charID)
+);
+
+CREATE TABLE "CHARACTER_languages"
+(
+  languages VARCHAR(1024) NOT NULL,
+  charID INT NOT NULL,
+  PRIMARY KEY (languages, charID),
+  CONSTRAINT fk_character FOREIGN KEY (charID) REFERENCES "CHARACTER"(charID)
+);
+
+CREATE TABLE "CHARACTER_toolProfs"
+(
+  toolProfs VARCHAR(1024) NOT NULL,
+  charID INT NOT NULL,
+  PRIMARY KEY (toolProfs, charID),
+  CONSTRAINT fk_character FOREIGN KEY (charID) REFERENCES "CHARACTER"(charID)
+);
+
+CREATE TABLE "EQUIPMENT"
+(
+  armor VARCHAR(1024) NOT NULL,
+  miscellaneous VARCHAR(1024) NOT NULL,
+  money FLOAT NOT NULL,
+  equipmentID SERIAL NOT NULL,
+  charID INT NOT NULL,
+  PRIMARY KEY (equipmentID),
+  CONSTRAINT fk_character FOREIGN KEY (charID) REFERENCES "CHARACTER"(charID)
+);
+
+CREATE TABLE "EQUIPMENT_weapon"
+(
+  weapon VARCHAR(1024) NOT NULL,
+  equipmentID INT NOT NULL,
+  PRIMARY KEY (weapon, equipmentID),
+  CONSTRAINT fk_equipment FOREIGN KEY (equipmentID) REFERENCES "EQUIPMENT"(equipmentID)
+);
+
+CREATE TABLE "EQUIPMENT_tool"
+(
+  tool VARCHAR(1024) NOT NULL,
+  equipmentID INT NOT NULL,
+  PRIMARY KEY (tool, equipmentID),
+  CONSTRAINT fk_equipment FOREIGN KEY (equipmentID) REFERENCES "EQUIPMENT"(equipmentID)
+);
+
+CREATE TABLE comprised_of
+(
+  partyID INT NOT NULL,
+  patronID INT NOT NULL,
+  PRIMARY KEY (partyID, patronID),
+  CONSTRAINT fk_party FOREIGN KEY (partyID) REFERENCES "PARTY"(partyID),
+  CONSTRAINT fk_patron FOREIGN KEY (patronID) REFERENCES "PATRON"(patronID)
+);
+
+CREATE TABLE casts
+(
+  dndClassID INT NOT NULL,
+  spellID INT NOT NULL,
+  PRIMARY KEY (dndClassID, spellID),
+  CONSTRAINT fk_dndclassid FOREIGN KEY (dndClassID) REFERENCES "DNDCLASS"(dndClassID),
+  CONSTRAINT fk_spell FOREIGN KEY (spellID) REFERENCES "SPELL"(spellID)
+);
+
+CREATE TABLE possesses
+(
+  charID INT NOT NULL,
+  skillID INT NOT NULL,
+  PRIMARY KEY (charID, skillID),
+  CONSTRAINT fk_character FOREIGN KEY (charID) REFERENCES "CHARACTER"(charID),
+  CONSTRAINT fk_skill FOREIGN KEY (skillID) REFERENCES "SKILL"(skillID)
+);
