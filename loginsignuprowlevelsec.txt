@@ -1,0 +1,57 @@
+CREATE ROLE authenticator NOINHERIT;
+CREATE ROLE admins;
+CREATE ROLE anonymous;
+CREATE ROLE authuser;
+
+GRANT anonymous, admins, authuser TO authenticator;
+
+GRANT SELECT, INSERT ON "PATRON" TO anonymous;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO admins, authuser;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admins;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO admins;
+GRANT EXECUTE ON FUNCTION
+  login(text,text),
+  signup(text, text, int, text)
+  TO anonymous;
+
+
+CREATE OR REPLACE FUNCTION
+signup(patronname text, patronpassword text, patronemail text) RETURNS VOID
+AS $$
+  INSERT INTO "PATRON" (patronname, patronpassword, isadmin, patronemail) VALUES
+    (signup.patronname, crypt(signup.patronpassword, gen_salt('bf', 8)), 0, signup.patronemail);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+
+CREATE OR REPLACE FUNCTION
+login(patronname TEXT, password TEXT) RETURNS jwt_token
+  LANGUAGE plpgsql SECURITY DEFINER
+  AS $$
+DECLARE
+  _role NAME;
+  result jwt_token;
+BEGIN
+  SELECT "PATRON".patronid FROM "PATRON" WHERE "PATRON".patronname=login.patronname AND "PATRON".patronpassword=crypt(login.password, "PATRON".patronpassword) INTO _role;
+  IF _role IS NULL THEN
+    RAISE invalid_password USING message = 'invalid user or password';
+  END IF;
+
+  SELECT sign(
+      row_to_json(r), current_setting('app.settings.jwt_secret')
+    ) AS token
+    from (
+      SELECT 'admins' AS role, login.patronname AS name, _role AS user_id,
+         extract(epoch from now())::integer + 3600*60*60 as exp
+    ) r
+    INTO result;
+
+  RETURN result;
+END;
+$$
+
+
+ALTER TABLE "CHARACTER" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS character_policy ON "CHARACTER";
+CREATE POLICY character_policy ON "CHARACTER"
+    USING (TRUE) 
+    WITH CHECK (patronid = current_setting('request.jwt.claim.user_id')::INTEGER);
