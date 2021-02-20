@@ -1,0 +1,25 @@
+CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.dateCreated = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp()
+RETURNS TRIGGER AS $$ 
+BEGIN 
+  NEW.patronDateCreated = NOW(); 
+  RETURN NEW; 
+END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_insert_timestamp
+BEFORE INSERT ON "TICKETS"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_insert_timestamp();
+
+CREATE TRIGGER set_insert_timestamp
+BEFORE INSERT ON "PATRON"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_insert_timestamp();
