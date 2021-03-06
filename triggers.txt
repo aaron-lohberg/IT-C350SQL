@@ -6,6 +6,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION trigger_set_no_admin()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.isadmin = 0;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp_patron()
 RETURNS TRIGGER AS $$ 
 BEGIN 
@@ -23,3 +31,8 @@ CREATE TRIGGER set_insert_timestamp_patron
 BEFORE INSERT ON "PATRON"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_insert_timestamp_patron()
+
+CREATE TRIGGER set_no_admin
+BEFORE INSERT ON "PATRON"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_no_admin()
