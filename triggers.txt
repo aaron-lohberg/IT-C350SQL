@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp()
+CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp_ticket()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.dateCreated = NOW();
@@ -6,7 +6,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp()
+CREATE OR REPLACE FUNCTION trigger_set_insert_timestamp_patron()
 RETURNS TRIGGER AS $$ 
 BEGIN 
   NEW.patronDateCreated = NOW(); 
@@ -14,14 +14,12 @@ BEGIN
 END; 
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER set_insert_timestamp
+CREATE TRIGGER set_insert_timestamp_ticket
 BEFORE INSERT ON "TICKETS"
 FOR EACH ROW
-EXECUTE PROCEDURE trigger_set_insert_timestamp();
+EXECUTE PROCEDURE trigger_set_insert_timestamp_ticket();
 
-CREATE TRIGGER set_insert_timestamp
+CREATE TRIGGER set_insert_timestamp_patron
 BEFORE INSERT ON "PATRON"
 FOR EACH ROW
-EXECUTE PROCEDURE trigger_set_insert_timestamp();
-
-I have changed something here.
+EXECUTE PROCEDURE trigger_set_insert_timestamp_patron()
