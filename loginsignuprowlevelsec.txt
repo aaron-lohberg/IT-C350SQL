@@ -18,9 +18,14 @@ GRANT EXECUTE ON FUNCTION
 CREATE OR REPLACE FUNCTION
 signup(patronname text, patronpassword text, patronemail text) RETURNS VOID
 AS $$
+BEGIN
+IF length(signup.patronpassword) > 15 THEN
   INSERT INTO "PATRON" (patronname, patronpassword, isadmin, patronemail) VALUES
     (signup.patronname, crypt(signup.patronpassword, gen_salt('bf', 8)), 0, signup.patronemail);
-$$ LANGUAGE sql SECURITY DEFINER;
+END IF;
+END;
+$$ LANGUAGE 'plpgsql' SECURITY DEFINER;
+
 
 
 CREATE OR REPLACE FUNCTION
