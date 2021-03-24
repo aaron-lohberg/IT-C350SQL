@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authHeader, getJwtToken, getRoleFromToken, getUserIdFromToken, getUserNameFromToken } from "./auth";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://192.168.50.56:8000";
 
 class Api {
   getCharacters() {
@@ -87,7 +87,7 @@ class Api {
   }
 
   getIDFromClassName(subclass) {
-    return axios.get(API_URL + "/DNDCLASS?dndclassname=eq." + subclass, {
+    return axios.get(API_URL + "/DNDCLASS?subclass=eq." + subclass, {
     headers: {
       'Authorization': 'Bearer ' + getJwtToken()
     }

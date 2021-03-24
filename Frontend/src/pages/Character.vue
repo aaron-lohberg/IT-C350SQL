@@ -11,7 +11,7 @@
     <div v-else>
       <h3><b>Name:</b> {{ character.charname }}</h3>
       <p><b>Race:</b> {{ character.racename }}</p>
-      <p><b>Class:</b> {{ character.dndclassname }}</p>
+      <p><b>Class:</b> {{ character.subclass }}</p>
       <p><b>Level:</b> {{ character.charlevel }}</p>
       <p><b>Background:</b> {{ character.background }}</p>
     </div>

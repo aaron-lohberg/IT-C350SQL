@@ -36,6 +36,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Party Details";
     this.loading = true;
     Api.getPatron().then((res) => {
       //console.log(res);

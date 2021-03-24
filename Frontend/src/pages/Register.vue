@@ -59,6 +59,9 @@
 import Api from "../api";
 export default {
   name: "Register",
+  created(){
+        document.title = "Register";
+  },
   data() {
     return {
       patronname: "",

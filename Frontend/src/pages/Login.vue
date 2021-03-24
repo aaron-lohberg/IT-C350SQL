@@ -50,12 +50,15 @@ import { setJwtToken } from "../auth";
 
 export default {
   name: "Login",
+  created(){
+        document.title = "Login";
+  },
   data() {
     return {
       patronname: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
     };
   },
   methods: {
@@ -67,8 +70,7 @@ export default {
           setJwtToken(res.data[0].token);
           if (this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl);
-          }
-          else {
+          } else {
             this.$router.push("/");
             this.$router.go(0); // refresh the page - https://stackoverflow.com/a/47005895
           }

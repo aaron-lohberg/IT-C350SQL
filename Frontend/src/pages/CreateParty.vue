@@ -104,6 +104,9 @@
 import Api from "../api";
 export default {
   name: "Register",
+  created(){
+        document.title = "Create a New Party";
+  },
   data() {
     return {
       campaignname: "",

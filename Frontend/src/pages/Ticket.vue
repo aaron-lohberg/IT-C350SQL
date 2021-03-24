@@ -29,6 +29,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Ticket Status";
     this.loading = true;
     Api.getPatron().then((res) => {
       //console.log(res);

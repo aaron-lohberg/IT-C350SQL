@@ -32,6 +32,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Admin - All Patrons";
     Api.getPatron().then((res) => {
       //console.log(res);
       this.isAdmin = (res.data[0].isadmin == 1);

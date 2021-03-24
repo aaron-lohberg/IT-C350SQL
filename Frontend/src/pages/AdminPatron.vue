@@ -31,6 +31,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Admin - Patron";
     this.loading = true;
     Api.getPatronFromId(this.$route.params.id).then((res) => {
       //console.log(res);

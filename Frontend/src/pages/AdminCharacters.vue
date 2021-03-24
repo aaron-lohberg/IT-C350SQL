@@ -32,7 +32,7 @@
             {{character.racename}}
           </div>
           <div class="grid-item2">
-            {{character.dndclassname}}
+            {{character.subclass}}
           </div>
           <div class="grid-item2">
             {{character.charlevel}}
@@ -59,6 +59,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Admin - Characters";
     Api.getPatron().then((res) => {
       //console.log(res);
       this.isAdmin = (res.data[0].isadmin == 1);

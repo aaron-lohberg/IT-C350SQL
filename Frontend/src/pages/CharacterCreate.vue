@@ -19,6 +19,7 @@
                         type="text"
                         id="name"
                         name="name"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -62,6 +63,7 @@
                         type="text"
                         id="background"
                         name="background"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -75,6 +77,7 @@
                         type="text"
                         id="flaw"
                         name="flaw"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -88,6 +91,7 @@
                         type="text"
                         id="bond"
                         name="bond"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -101,6 +105,7 @@
                         type="text"
                         id="ideal"
                         name="ideal"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -117,6 +122,7 @@
                         type="text"
                         id="Height"
                         name="Height"
+                        placeholder="Float (e.g, 5.6, 2.4, etc)"
                       /><br />
                     </fieldset>
                   </div>
@@ -130,6 +136,7 @@
                         type="text"
                         id="Eye Color"
                         name="Eye Color"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -143,6 +150,7 @@
                         type="text"
                         id="Hair Color"
                         name="Hair Color"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -156,6 +164,7 @@
                         type="text"
                         id="Weight"
                         name="Weight"
+                        placeholder="Integer (e.g, 25, 693, etc)"
                       /><br />
                     </fieldset>
                   </div>
@@ -169,6 +178,7 @@
                         type="text"
                         id="Age"
                         name="Age"
+                        placeholder="Integer (e.g, 25, 693, etc)"
                       /><br />
                     </fieldset>
                   </div>
@@ -182,6 +192,7 @@
                         type="text"
                         id="Skin Color"
                         name="Skin Color"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -195,6 +206,7 @@
                         type="text"
                         id="Unique Mark"
                         name="Unique Mark"
+                        placeholder="String (1024 letter max)"
                       /><br />
                     </fieldset>
                   </div>
@@ -613,6 +625,7 @@
                         type="text"
                         id="level"
                         name="level"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -626,6 +639,7 @@
                         type="text"
                         id="hitpoints"
                         name="hitpoints"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -639,6 +653,7 @@
                         type="text"
                         id="strength"
                         name="strength"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -652,6 +667,7 @@
                         type="text"
                         id="Dexterity"
                         name="Dexterity"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -665,6 +681,7 @@
                         type="text"
                         id="Constitution"
                         name="Constitution"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -678,6 +695,7 @@
                         type="text"
                         id="Intelligence"
                         name="Intelligence"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -691,6 +709,7 @@
                         type="text"
                         id="Wisdom"
                         name="Wisdom"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -704,6 +723,7 @@
                         type="text"
                         id="Charisma"
                         name="Charisma"
+                        placeholder="Integer"
                       /><br />
                     </fieldset>
                   </div>
@@ -875,12 +895,13 @@ export default {
     },
   },
   created: function () {
+    document.title = "Create a Character";
     this.loading = true;
     Api.getAllClasses().then((res) => {
       //console.log(res);
       var newArray = [{ value: null, text: "Select a class" }];
       for (var i = 1; i <= res.data.length; i++) {
-        newArray[i] = res.data[i - 1].dndclassname;
+        newArray[i] = res.data[i - 1].subclass;
       }
       this.classOptions = newArray;
       this.classes = res.data;

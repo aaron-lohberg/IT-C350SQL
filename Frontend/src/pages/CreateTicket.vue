@@ -42,6 +42,9 @@
 import Api from "../api";
 export default {
   name: "CreateTicket",
+  created(){
+        document.title = "Create a Service Ticket";
+  },
   data() {
     return {
       patronid: Api.getUserID(),

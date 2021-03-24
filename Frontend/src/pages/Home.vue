@@ -31,7 +31,7 @@ import Api from "../api";
 import {  } from '../auth';
 
 export default {
-  name: "adminCharacters",
+  name: "Home",
   data: function () {
     return {
       isAdmin: false,
@@ -43,6 +43,7 @@ export default {
     };
   },
   created: function () {
+    document.title = "Home Page";
     this.loading = true;
     Api.getPatron().then((res) => {
       //console.log(res);

@@ -95,6 +95,9 @@
 import Api from "../api";
 export default {
   name: "PartySearch",
+  created(){
+        document.title = "Find a Party";
+  },
   data() {
     return {
       partyname: "",
